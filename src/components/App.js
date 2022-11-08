@@ -1,13 +1,8 @@
-import React, { Component } from "react";
+import React from "react";
+import Registration from "./Registration";
 
-class App extends Component {
-    render() {
-        return(
-            <div>
-                <h1>Hello World! SNOUT</h1>
-            </div>
-        )
-    }
+function App() {
+    return <Registration />
 }
 
 export default App;
