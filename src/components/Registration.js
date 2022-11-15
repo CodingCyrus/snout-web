@@ -1,21 +1,23 @@
 import React, { useRef, useState } from 'react';
-import { Form, Button, Card } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import {
     createUserWithEmailAndPassword,
-    onAuthStateChanged,
-    signInWithEmailAndPassword,
-    signOut
+    onAuthStateChanged
 } from "firebase/auth";
 import { auth } from '../context/firebase'
 
-export default function Registration() {
-
-    const emailRef = useRef()
-    const passwordRef = useRef()
-    const passwordConfirmRef = useRef()
+export function Registration(props) {
 
     const [registerEmail, setRegisterEmail] = useState("");
     const [registerPassword, setRegisterPassword] = useState("");
+
+    const [user, setUser] = useState({});
+
+    React.useEffect(() => {
+        onAuthStateChanged(auth, (currentUser) => {
+            setUser(currentUser)
+        });
+    }, []);
 
     const register = async () => {
         try {
@@ -31,58 +33,71 @@ export default function Registration() {
     };
 
     return (
-            <form class="form-right">
+        <form className="form-right">
 
-                <h2 class="text-uppercase">Registration form</h2>
+            <h2 className="text-uppercase">Registration</h2>
 
-                <div class="form-outline mb-4">
-                    <input
-                        type="text"
-                        placeholder="First Name"
-                        id="registerFirstName"
-                        class="form-control" />
-                </div>
+            <div className="form-outline mb-4">
+                <input
+                    type="text"
+                    placeholder="First Name"
+                    id="registerFirstName"
+                    className="form-control" />
+            </div>
 
-                <div class="form-outline mb-4">
-                    <input
-                        type="text"
-                        placeholder="Last Name"
-                        id="registerLastName"
-                        class="form-control" />
-                </div>
+            <div className="form-outline mb-4">
+                <input
+                    type="text"
+                    placeholder="Last Name"
+                    id="registerLastName"
+                    className="form-control" />
+            </div>
 
-                <div class="form-outline mb-4">
-                    <input
-                        type="email"
-                        placeholder="Enter email"
-                        id="registerEmail"
-                        class="form-control"
-                        onChange={(event) => {
-                            setRegisterEmail(event.target.value);
-                        }} />
-                    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-                </div>
+            <div className="form-outline mb-4">
+                <input
+                    type="email"
+                    placeholder="Enter email"
+                    id="registerEmail"
+                    className="form-control"
+                    onChange={(event) => {
+                        setRegisterEmail(event.target.value);
+                    }} />
+                <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small>
+            </div>
 
-                <div class="form-outline mb-4">
-                    <input
-                        type="password"
-                        placeholder="Password"
-                        id="registerPassword"
-                        class="form-control"
-                        onChange={(event) => {
-                            setRegisterPassword(event.target.value);
-                        }} />
-                </div>
+            <div className="form-outline mb-4">
+                <input
+                    type="password"
+                    placeholder="Password"
+                    id="registerPassword"
+                    className="form-control"
+                    onChange={(event) => {
+                        setRegisterPassword(event.target.value);
+                    }} />
+            </div>
 
-                <div class="form-outline mb-4">
-                    <input
-                        type="password"
-                        placeholder="Confirm Password"
-                        id="registerRepeatPassword"
-                        class="form-control" />
-                </div>
+            <div className="form-outline mb-4">
+                <input
+                    type="password"
+                    placeholder="Confirm Password"
+                    id="registerRepeatPassword"
+                    className="form-control" />
+            </div>
 
-                <button onClick={register} type="button" class="btn btn-primary">Register Account</button>
-            </form>
+            <button onClick={register} type="button" className="btn btn-primary">Register Account</button>
+
+            <div className="text-center">
+                <p>Already have an account? <button onClick={() => props.onFormSwitch('login')}>Sign In</button></p>
+            </div>
+
+            <div>
+                SNOUT HOMEPAGE
+                <Link to="/">HOME</Link>
+                <Link to="/login">LOGIN</Link>
+                <Link to="/registration">REGISTER</Link>
+            </div>
+        </form>
     );
-}
+};
+
+export default Registration;
